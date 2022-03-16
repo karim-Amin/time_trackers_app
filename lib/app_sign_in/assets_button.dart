@@ -18,7 +18,9 @@ class AssetsButton extends StatelessWidget {
     this.onPressed,
     this.color,
     this.textColor,
-  });
+    // Assertions to avoid the run Time Error
+  })  : assert(assetName != null),
+        assert(text != null);
 
   @override
   Widget build(BuildContext context) {
