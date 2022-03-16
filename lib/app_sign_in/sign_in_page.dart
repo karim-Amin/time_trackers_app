@@ -1,8 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_trackers_app/app_sign_in/sign_in_button.dart';
 import 'assets_button.dart';
 
 class SignInPage extends StatelessWidget {
+  // uderscore used to mark this function as a private one
+  Future<void> _signInAnonymously() async {
+    try {
+      // signInAnonymously is async function so i have to wait it
+      final userCredentials = await FirebaseAuth.instance.signInAnonymously();
+      print("The user id is ${userCredentials.user.uid}");
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -72,9 +84,7 @@ class SignInPage extends StatelessWidget {
               text: "Go anonymous",
               textColor: Colors.black,
               color: Colors.lime[300],
-              onPressed: () {
-                print("Go anonymous Button Pressed");
-              },
+              onPressed: () => _signInAnonymously(),
             ),
           ],
         ),
