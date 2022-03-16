@@ -14,6 +14,7 @@ class AssetsButton extends StatelessWidget {
     // Required Parameters
     @required this.assetName,
     @required this.text,
+    // optional Named Parameters
     this.onPressed,
     this.color,
     this.textColor,
