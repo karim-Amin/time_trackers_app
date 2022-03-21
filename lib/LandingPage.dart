@@ -9,6 +9,16 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  // check if is there current user logged in
+  // in the initialization function of the stateful
+  // widget if the app is restarted will maintain its state
+  @override
+  void initState() {
+    super.initState();
+    // update the state of the landing page
+    _updateUser(FirebaseAuth.instance.currentUser);
+  }
+
   // Store the user state to decide which page to display
   User _user;
   // Define the Function which will be called back when
@@ -31,6 +41,8 @@ class _LandingPageState extends State<LandingPage> {
         onSignIn: (user) => this._updateUser(user),
       );
     }
-    return HomePage(); // a place holder for the home page
+    return HomePage(
+      onSignOut: () => _updateUser(null),
+    ); // a place holder for the home page
   }
 }
