@@ -1,23 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:time_trackers_app/Services/Auth.dart';
 import 'package:time_trackers_app/app_sign_in/sign_in_button.dart';
 import 'assets_button.dart';
 
 class SignInPage extends StatelessWidget {
   // Constructor to set the call back function
-  const SignInPage({Key key, @required this.onSignIn}) : super(key: key);
+  const SignInPage({Key key, @required this.onSignIn, @required this.auth})
+      : super(key: key);
   // define call back function
   final void Function(User) onSignIn;
-
+  // inject this object to the constructor to use the functions
+  final AuthBase auth;
   // uderscore used to mark this function as a private one
   Future<void> _signInAnonymously() async {
     try {
       // signInAnonymously is async function so i have to wait it
       // this firebaseAuth class only has one intance
-      final userCredentials = await FirebaseAuth.instance.signInAnonymously();
+      //final userCredentials = await FirebaseAuth.instance.signInAnonymously();
       // call the function and pass the new state
-      this.onSignIn(userCredentials.user);
-      print("The user id is ${userCredentials.user.uid}");
+      final user = await auth.signInAnonymously();
+      this.onSignIn(user);
+      print("The user id is ${user.uid}");
     } catch (e) {
       print(e.toString());
     }

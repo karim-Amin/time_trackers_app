@@ -1,9 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_trackers_app/HomePage.dart';
+import 'package:time_trackers_app/Services/Auth.dart';
 import 'package:time_trackers_app/app_sign_in/sign_in_page.dart';
 
 class LandingPage extends StatefulWidget {
+  // inject the landing page with auth object to
+  // hide the impelementation
+  const LandingPage({Key key, @required this.auth}) : super(key: key);
+  final AuthBase auth;
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
@@ -16,7 +21,8 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     super.initState();
     // update the state of the landing page
-    _updateUser(FirebaseAuth.instance.currentUser);
+    //_updateUser(FirebaseAuth.instance.currentUser);
+    _updateUser(widget.auth.currentUser);
   }
 
   // Store the user state to decide which page to display
@@ -38,10 +44,12 @@ class _LandingPageState extends State<LandingPage> {
       // after sign in method completed it will update
       // the state variable in landing page
       return SignInPage(
+        auth: widget.auth,
         onSignIn: (user) => this._updateUser(user),
       );
     }
     return HomePage(
+      auth: widget.auth,
       onSignOut: () => _updateUser(null),
     ); // a place holder for the home page
   }
