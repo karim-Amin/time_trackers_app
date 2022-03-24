@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthBase {
   User get currentUser;
-  Stream<User> authGetuserstatus();
+  Stream<User> onAuthStateChange();
   Future<User> signInAnonymously();
   Future<void> signOut();
 }
@@ -13,7 +13,7 @@ class Auth implements AuthBase {
   final _authInstance = FirebaseAuth.instance;
   // return the stream of type user which is async function
   @override
-  Stream<User> authGetuserstatus() => _authInstance.authStateChanges();
+  Stream<User> onAuthStateChange() => _authInstance.authStateChanges();
   // Custom Getter function for currentUser field
   @override
   User get currentUser => _authInstance.currentUser;
