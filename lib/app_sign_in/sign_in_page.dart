@@ -22,6 +22,18 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  Future<void> _signInWithGoogle() async {
+    try {
+      // signInAnonymously is async function so i have to wait it
+      // this firebaseAuth class only has one intance
+      //final userCredentials = await FirebaseAuth.instance.signInAnonymously();
+      // call the function and pass the new state
+      await auth.signInWithGoogle();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,9 +65,7 @@ class SignInPage extends StatelessWidget {
                 assetName: "images/google-logo.png",
                 text: "Sign in with Google",
                 textColor: Colors.black87,
-                onPressed: () {
-                  print("Google Button Pressed");
-                },
+                onPressed: _signInWithGoogle,
                 color: Colors.white,
               ),
               SizedBox(
