@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 
 abstract class AuthBase {
   User get currentUser;
   Stream<User> onAuthStateChange();
   Future<User> signInAnonymously();
   Future<User> signInWithGoogle();
+  Future<void> signInWithFacebook();
   Future<void> signOut();
 }
 
@@ -25,6 +27,38 @@ class Auth implements AuthBase {
   Future<User> signInAnonymously() async {
     UserCredential userCredential = await _authInstance.signInAnonymously();
     return userCredential.user;
+  }
+
+  @override
+  Future<void> signInWithFacebook() async {
+    // to trigger facebook log in
+    final fb = FacebookLogin();
+    // fb.logIn() returns Future<FacebookLoginResult>
+    // it takes the permissions to access user data
+    final response = await fb.logIn(permissions: [
+      FacebookPermission.email,
+      FacebookPermission.publicProfile
+    ]);
+
+    switch (response.status) {
+      // if the login process was sccussful
+      case FacebookLoginStatus.success:
+        // get the access token from the response
+        final accessToken = response.accessToken;
+        // sign in the fire base
+        final userCredential = await _authInstance.signInWithCredential(
+            FacebookAuthProvider.credential(accessToken.token));
+        return userCredential.user;
+      case FacebookLoginStatus.cancel:
+        throw FirebaseAuthException(
+            code: 'ERROR_FACEBOOK_LOG_IN_CANCELD',
+            message: 'User canceled the login sation ');
+      case FacebookLoginStatus.error:
+        throw FirebaseAuthException(
+          code: 'ERROR_FACEBOOK_LOG_IN_FAILED',
+          message: 'INVALID_FACEBOOK_AUTHENTICATION',
+        );
+    }
   }
 
   @override
