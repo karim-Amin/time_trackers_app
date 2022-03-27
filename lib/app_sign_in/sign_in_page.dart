@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_trackers_app/Services/Auth.dart';
+import 'package:time_trackers_app/app_sign_in/email_sign_in_page.dart';
 import 'package:time_trackers_app/app_sign_in/sign_in_button.dart';
 import 'assets_button.dart';
 
@@ -44,6 +45,18 @@ class SignInPage extends StatelessWidget {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void _signInWithEmail(BuildContext context) {
+    // we have a navigator stack when the app is created
+    // push on this stack a new route which containes the widegt
+    Navigator.of(context).push(
+      // creating new route
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => EmailSignIn(),
+      ),
+    );
   }
 
   @override
@@ -97,9 +110,7 @@ class SignInPage extends StatelessWidget {
                 text: "Sign In With email",
                 textColor: Colors.white,
                 color: Colors.teal[700],
-                onPressed: () {
-                  print("Email Button Pressed");
-                },
+                onPressed: () => _signInWithEmail(context),
               ),
               Container(
                 child: Text(
