@@ -1,23 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:time_trackers_app/common_widgets/form_sign_in_button.dart';
 
+// define a type for two possible status
+enum EmailSignInStatusType { SignIn, Register }
+
 class SignInForm extends StatefulWidget {
   @override
   State<SignInForm> createState() => _SignInFormState();
 }
 
 class _SignInFormState extends State<SignInForm> {
+  // TextEditing controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  // define a variable will hold the status
+  EmailSignInStatusType _signInStatus = EmailSignInStatusType.SignIn;
   void _submit() {
     print(
         'email : ${_emailController.text} password : ${_passwordController.text}');
   }
 
+  void _toggelStatus() {
+    // clear the text fileds
+    _emailController.clear();
+    _passwordController.clear();
+    setState(() {
+      _signInStatus = _signInStatus == EmailSignInStatusType.SignIn
+          ? EmailSignInStatusType.Register
+          : EmailSignInStatusType.SignIn;
+    });
+  }
+
   List<Widget> _buildChildren() {
+    // string displayed in the first button
+    String primary =
+        _signInStatus == EmailSignInStatusType.SignIn ? 'Sign in' : 'Register';
+    // string displayed in the second button (Text button)
+    String secondery = _signInStatus == EmailSignInStatusType.SignIn
+        ? 'Need an account ? Register'
+        : 'Have an account ? Sign in';
     return [
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         // assign text controller for each textField
         child: TextField(
           controller: _emailController,
@@ -29,7 +53,7 @@ class _SignInFormState extends State<SignInForm> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: TextField(
           controller: _passwordController,
           decoration: InputDecoration(
@@ -40,10 +64,11 @@ class _SignInFormState extends State<SignInForm> {
           obscureText: true,
         ),
       ),
-      Padding(
+      Container(
         padding: const EdgeInsets.all(8.0),
+        height: 75.0,
         child: CustomElevatedButton(
-          text: 'Sign in',
+          text: primary,
           onPressed: _submit,
           color: Colors.indigo,
         ),
@@ -52,13 +77,13 @@ class _SignInFormState extends State<SignInForm> {
           padding: const EdgeInsets.all(8.0),
           child: TextButton(
             child: Text(
-              'Do not have an account ?',
+              secondery,
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 14.0,
               ),
             ),
-            onPressed: () {},
+            onPressed: _toggelStatus,
           )),
     ];
   }
@@ -70,6 +95,7 @@ class _SignInFormState extends State<SignInForm> {
         title: Text('Sign in'),
         centerTitle: true,
       ),
+      backgroundColor: Colors.grey[300],
       body: Padding(
         padding: const EdgeInsets.all(14.0),
         child: Card(
