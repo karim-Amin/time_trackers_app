@@ -38,6 +38,7 @@ class _SignInFormState extends State<SignInForm> {
     } catch (e) {
       print(e.toString());
     }
+    // check that there is a valid user
     if (user != null) {
       Navigator.of(context).pop();
     }
@@ -64,37 +65,15 @@ class _SignInFormState extends State<SignInForm> {
         ? 'Need an account ? Register'
         : 'Have an account ? Sign in';
     return [
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        // assign text controller for each textField
-        child: TextField(
-          controller: _emailController,
-          decoration: InputDecoration(
-            border: UnderlineInputBorder(),
-            hintText: "example@example.com",
-            labelText: 'Email',
-          ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: TextField(
-          controller: _passwordController,
-          decoration: InputDecoration(
-            border: UnderlineInputBorder(),
-            labelText: 'Password',
-          ),
-          // to hide the password when entering it
-          obscureText: true,
-        ),
-      ),
+      _bulidEmailTextField(),
+      _bulidPasswordTextFiled(),
       Container(
         padding: const EdgeInsets.all(8.0),
         height: 75.0,
         child: CustomElevatedButton(
           child: Text(
             primary,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           onPressed: _submit,
           color: Colors.indigo,
@@ -113,6 +92,46 @@ class _SignInFormState extends State<SignInForm> {
             onPressed: _toggelStatus,
           )),
     ];
+  }
+
+  Padding _bulidPasswordTextFiled() {
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
+        child: TextField(
+          controller: _passwordController,
+          decoration: InputDecoration(
+            border: UnderlineInputBorder(),
+            labelText: 'Password',
+          ),
+          // when writing the password the action button in the keyboard
+          // will be( done )
+          textInputAction: TextInputAction.done,
+          // to hide the password when entering it
+          obscureText: true,
+          onEditingComplete: _submit,
+        ),
+      );
+  }
+
+  Padding _bulidEmailTextField() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
+      // assign text controller for each textField
+      child: TextField(
+        controller: _emailController,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintText: "example@example.com",
+          labelText: 'Email',
+        ),
+        // set the keyboard settings to disable auto correct setting
+        autocorrect: false,
+        keyboardType: TextInputType.emailAddress,
+        // when writing the email the action button in the keyboard
+        // will be( next )
+        textInputAction: TextInputAction.next,
+      ),
+    );
   }
 
   @override
